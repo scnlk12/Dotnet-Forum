@@ -15,6 +15,7 @@ using CampusForum.Models;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Http;
 
 namespace CampusForum
 {
@@ -42,6 +43,18 @@ namespace CampusForum
                 var xmlPath = Path.Combine(basePath, "CampusForum.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            //¿çÓòÎÊÌâ
+            /*services.AddCors(options => options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder.AllowAnyMethod()
+                    .SetIsOriginAllowed(_ => true)
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                }));*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,6 +70,8 @@ namespace CampusForum
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
 
             app.UseAuthorization();
 
